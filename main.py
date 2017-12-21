@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO
 
 import mqtt
+import audio
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -17,4 +18,5 @@ def test_connect():
 
 if __name__ == '__main__':
     mqtt.start(socketio)
-    socketio.run(app, debug=True)
+    audio.start(socketio)
+    socketio.run(app, host='0.0.0.0', debug=True)
