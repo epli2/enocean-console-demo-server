@@ -9,6 +9,7 @@ import json
 FRAMES_PER_BUFFER = 4096
 CHANNELS = 1
 RATE = 48000
+INDEX = 0
 RECORD_SECONDS = 1
 
 def getstream():
@@ -17,6 +18,7 @@ def getstream():
                         channels=CHANNELS,
                         rate=RATE,
                         input=True,
+                        input_device_index=INDEX,
                         frames_per_buffer=FRAMES_PER_BUFFER)
         for i in range(0, int(RATE / FRAMES_PER_BUFFER * RECORD_SECONDS)):
             data = stream.read(FRAMES_PER_BUFFER)
