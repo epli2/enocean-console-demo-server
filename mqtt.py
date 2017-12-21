@@ -6,6 +6,8 @@ import paho.mqtt.client as mqtt
 # from pymongo import MongoClient
 from bson import ObjectId
 
+MQTT_SERVER_IP = '192.168.212.21'
+
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
         if isinstance(o, ObjectId):
@@ -53,7 +55,7 @@ def mqtt_connect():
     # mqttc.on_publish = on_publish
     # mqttc.on_subscribe = on_subscribe
 
-    mqttc.connect('192.168.212.21', 8080)
+    mqttc.connect(MQTT_SERVER_IP, 8080)
 
     mqttc.subscribe('sensor/#', 0)
 
