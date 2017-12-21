@@ -1,6 +1,8 @@
 # enocean-console-demo-server
 https://github.com/epli2/enocean-console-demo 用のサーバです  
 
+## 既知のバグ
+- マイクによってはうまく動作しない
 
 ## インストール
 python3, pip3, mongodbのインストール  
