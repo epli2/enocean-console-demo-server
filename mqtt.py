@@ -81,6 +81,18 @@ def start(_socketio):
     db = client.sensordb
     co = db.sensordata
 
+    for i in co.find({'topic': 'sensor/04016777/Illumination'}).sort('timestamp').limit(1):
+        data_illum.insert(0, i['value'])
+        print(i['value'])
+
+    for i in co.find({'topic': 'sensor/04016897/Humidity'}).sort('timestamp').limit(1):
+        data_humid.insert(0, i['value'])
+        print(i['value'])
+
+    for i in co.find({'topic': 'sensor/04016897/Temperature'}).sort('timestamp').limit(1):
+        data_temp.insert(0, i['value'])
+        print(i['value'])
+
     # setup mqtt connection
     th = threading.Thread(target=mqtt_connect, name='th', args=())
     th.setDaemon(True)
