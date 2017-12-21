@@ -107,8 +107,10 @@ venv.bak/
 
 
 # statics
-static/
-templates/
+static/*
+templates/*
 
 # vscode
 .vscode/
+
+!.gitkeep
