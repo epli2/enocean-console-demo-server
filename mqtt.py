@@ -3,10 +3,10 @@ import banpei
 import threading
 import json
 import paho.mqtt.client as mqtt
-# from pymongo import MongoClient
+from pymongo import MongoClient
 from bson import ObjectId
 
-MQTT_SERVER_IP = '192.168.212.21'
+MQTT_SERVER_IP = '192.168.212.40'
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -29,7 +29,7 @@ def on_message(mqttc, obj, msg):
     elif payload['topic'] == 'sensor/04016897/Temperature':
         data_temp.append(payload['value'])
         payload['ret'] = model_temp.stream_detect(data_temp)
-    # co.insert_one(payload)
+    co.insert_one(payload)
     socketio.emit('data', JSONEncoder().encode(payload), namespace='/api/socket')
     print(msg.topic+' '+str(msg.qos)+' '+str(msg.payload))
 
@@ -62,7 +62,7 @@ def mqtt_connect():
     mqttc.loop_forever()
 
 def start(_socketio):
-    # global co
+    global co
     global socketio
     global model_illum
     global model_humid
@@ -79,21 +79,21 @@ def start(_socketio):
     data_temp = []
 
     # setup mongodb connection
-    # client = MongoClient('localhost', 27017)
-    # db = client.sensordb
-    # co = db.sensordata
+    client = MongoClient('localhost', 27017)
+    db = client.sensordb
+    co = db.sensordata
 
-    # for i in co.find({'topic': 'sensor/04016777/Illumination'}).sort('timestamp').limit(1):
-    #     data_illum.insert(0, i['value'])
-    #     print(i['value'])
+    for i in co.find({'topic': 'sensor/04016777/Illumination'}).sort('timestamp').limit(1):
+        data_illum.insert(0, i['value'])
+        print(i['value'])
 
-    # for i in co.find({'topic': 'sensor/04016897/Humidity'}).sort('timestamp').limit(1):
-    #     data_humid.insert(0, i['value'])
-    #     print(i['value'])
+    for i in co.find({'topic': 'sensor/04016897/Humidity'}).sort('timestamp').limit(1):
+        data_humid.insert(0, i['value'])
+        print(i['value'])
 
-    # for i in co.find({'topic': 'sensor/04016897/Temperature'}).sort('timestamp').limit(1):
-    #     data_temp.insert(0, i['value'])
-    #     print(i['value'])
+    for i in co.find({'topic': 'sensor/04016897/Temperature'}).sort('timestamp').limit(1):
+        data_temp.insert(0, i['value'])
+        print(i['value'])
 
     # setup mqtt connection
     th = threading.Thread(target=mqtt_connect, name='th', args=())
