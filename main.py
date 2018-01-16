@@ -26,7 +26,7 @@ def history(paramname, length):
 
     data = []
     for i in co.find({'topic': topic}).sort('timestamp', -1).limit(length):
-        data.append('{"value":%s,"timestamp":"%s","ret":"%s"}' % (i['value'], i['timestamp'], i['ret']))
+        data.append('{"value":%s,"timestamp":"%s","topic":"%s","ret":"%s"}' % (i['value'], i['timestamp'], i['topic'], i['ret']))
     return '{"data":[%s]}' % ','.join(data)
 
 @socketio.on('connect', namespace='/api/socket')
