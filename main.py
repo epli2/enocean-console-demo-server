@@ -21,6 +21,8 @@ def history(paramname, length):
         topic = 'sensor/04016897/Humidity'
     elif paramname == 'illumination':
         topic = 'sensor/04016777/Illumination'
+    elif paramname == 'audio':
+        topic = 'audio'
     else:
         return '{ }'
 

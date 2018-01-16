@@ -5,6 +5,7 @@ import audioop
 import threading
 import datetime
 import json
+from pymongo import MongoClient
 
 FRAMES_PER_BUFFER = 4096
 CHANNELS = 1
@@ -30,6 +31,7 @@ def getstream():
                 'topic': 'audio',
                 'ret': model.stream_detect(rmsArray)}
         socketio.emit('audio', json.JSONEncoder().encode(data), namespace='/api/socket')
+        co.insert_one(data)
 
 def start(_socketio):
     global socketio
@@ -37,6 +39,13 @@ def start(_socketio):
     global stream
     global model
     global rmsArray
+
+    # setup mongodb connection
+    global co
+    client = MongoClient('localhost', 27017)
+    db = client.sensordb
+    co = db.sensordata
+
     socketio = _socketio
     p = pyaudio.PyAudio()
     model = banpei.SST(w=30)
