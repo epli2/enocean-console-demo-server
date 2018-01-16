@@ -25,8 +25,9 @@ def getstream():
             rms = audioop.rms(data, 2)
         rmsArray.append(rms)
         print(rms)
-        data = {'volume': rms,
+        data = {'value': rms,
                 'timestamp': str(datetime.datetime.utcnow().isoformat()) + 'Z',
+                'topic': 'audio',
                 'ret': model.stream_detect(rmsArray)}
         socketio.emit('audio', json.JSONEncoder().encode(data), namespace='/api/socket')
 
