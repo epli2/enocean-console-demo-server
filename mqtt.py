@@ -6,7 +6,7 @@ import paho.mqtt.client as mqtt
 from pymongo import MongoClient
 from bson import ObjectId
 
-MQTT_SERVER_IP = '192.168.212.40'
+MQTT_SERVER_IP = 'localhost'
 
 class JSONEncoder(json.JSONEncoder):
     def default(self, o):
@@ -44,12 +44,7 @@ def on_log(mqttc, obj, level, string):
 
 def mqtt_connect():
     mqttc = mqtt.Client(transport='websockets')
-    headers = {
-        'Sec-WebSocket-Version': '13',
-        'Sec-WebSocket-Protocol': 'mqtt'
-    }
-    mqttc.ws_set_options(path='/mqtt', headers=headers)
-    mqttc.username_pw_set('james-kitchen', password='webdino')
+    mqttc.ws_set_options(path='/mqtt')
     mqttc.on_message = on_message
     mqttc.on_connect = on_connect
     # mqttc.on_publish = on_publish
