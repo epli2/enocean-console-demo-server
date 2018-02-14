@@ -22,7 +22,7 @@ def getstream():
                         input_device_index=INDEX,
                         frames_per_buffer=FRAMES_PER_BUFFER)
         for i in range(0, int(RATE / FRAMES_PER_BUFFER * RECORD_SECONDS)):
-            data = stream.read(FRAMES_PER_BUFFER)
+            data = stream.read(FRAMES_PER_BUFFER, exception_on_overflow = False)
             rms = audioop.rms(data, 2)
         rmsArray.append(rms)
         print(rms)
