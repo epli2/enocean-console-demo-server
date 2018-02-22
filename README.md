@@ -58,8 +58,8 @@ connection_messages true
 - [こちら](https://github.com/epli2/enocean-console-demo)のREADMEを参考に、`templates/`以下に`index.html`を、`static/`以下に`js/`と`css/`をコピーしてください
 
 ### 設定
-`mqtt.py`の9行目`MQTT_SERVER_IP = `のipアドレスの部分をEnOceanセンサのMQTTサーバのものに変えてください  
-`audio.py`の12行目`INDEX = `の値を使用するマイクのインデックスに変えてください  
+`config.json`の`mqtt_server.ip`の値をEnOceanセンサのMQTTサーバのものに変えてください  
+`config.json`の`audio.INDEX`の値を使用するマイクのインデックスに変えてください  
 マイクのインデックスの取得方法  
 ```python
 > import pyaudio

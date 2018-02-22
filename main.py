@@ -2,7 +2,7 @@
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from pymongo import MongoClient
-
+import json
 import mqtt
 import audio
 
@@ -36,7 +36,9 @@ def test_connect():
     print('connected from client')
 
 if __name__ == '__main__':
-    client = MongoClient('localhost', 27017)
+    configfile = open('./config.json', 'r')
+    config = json.load(configfile)
+    client = MongoClient(config['mongo']['ip'], config['mongo']['port'])
     db = client.sensordb
     co = db.sensordata
     mqtt.start(socketio)

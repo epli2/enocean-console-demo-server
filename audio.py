@@ -7,22 +7,16 @@ import datetime
 import json
 from pymongo import MongoClient
 
-FRAMES_PER_BUFFER = 4096
-CHANNELS = 1
-RATE = 48000
-INDEX = 0
-RECORD_SECONDS = 1
-
 def getstream():
     while True:
         stream = p.open(format=pyaudio.paInt16,
-                        channels=CHANNELS,
-                        rate=RATE,
+                        channels=config_audio['CHANNELS'],
+                        rate=config_audio['RATE'],
                         input=True,
-                        input_device_index=INDEX,
-                        frames_per_buffer=FRAMES_PER_BUFFER)
-        for i in range(0, int(RATE / FRAMES_PER_BUFFER * RECORD_SECONDS)):
-            data = stream.read(FRAMES_PER_BUFFER, exception_on_overflow = False)
+                        input_device_index=config_audio['INDEX'],
+                        frames_per_buffer=config_audio['FRAMES_PER_BUFFER'])
+        for i in range(0, int(config_audio['RATE'] / config_audio['FRAMES_PER_BUFFER'] * config_audio['RECORD_SECONDS'])):
+            data = stream.read(config_audio['FRAMES_PER_BUFFER'], exception_on_overflow=False)
             rms = audioop.rms(data, 2)
         rmsArray.append(rms)
         print(rms)
@@ -40,9 +34,14 @@ def start(_socketio):
     global model
     global rmsArray
 
+    configfile = open('./config.json', 'r')
+    config = json.load(configfile)
+    global config_audio
+    config_audio = config['audio']
+    
     # setup mongodb connection
     global co
-    client = MongoClient('localhost', 27017)
+    client = MongoClient(config['mongo']['ip'], config['mongo']['port'])
     db = client.sensordb
     co = db.sensordata
 

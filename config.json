@@ -1,0 +1,20 @@
+{
+    "mqtt_server": {
+        "ip": "localhost",
+        "port": 8080,
+        "username": "",
+        "password": "",
+        "header": false
+    },
+    "mongo": {
+        "ip": "localhost",
+        "port": 27017
+    },
+    "audio": {
+        "FRAMES_PER_BUFFER": 4096,
+        "CHANNELS": 1,
+        "RATE": 48000,
+        "INDEX": 0,
+        "RECORD_SECONDS": 1
+    }
+}
