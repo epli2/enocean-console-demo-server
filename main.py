@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from flask_socketio import SocketIO
 from pymongo import MongoClient
 import json
 import mqtt
 import audio
+import douglasPeucker
 
 app = Flask(__name__)
 socketio = SocketIO(app)
@@ -13,8 +14,10 @@ socketio = SocketIO(app)
 def index():
     return render_template('index.html')
 
-@app.route('/api/history/<paramname>/<int:length>', methods=['GET'])
-def history(paramname, length):
+@app.route('/api/history/<string:paramname>/<int:length>', defaults={'tolerance': 0}, methods=['GET'])
+@app.route('/api/history/<string:paramname>/<int:length>/<float:tolerance>', methods=['GET'])
+@app.route('/api/history/<string:paramname>/<int:length>/<int:tolerance>', methods=['GET'])
+def history(paramname, length, tolerance):
     if paramname == 'temperature':
         topic = 'sensor/04016897/Temperature'
     elif paramname == 'humidity':
@@ -24,12 +27,12 @@ def history(paramname, length):
     elif paramname == 'audio':
         topic = 'audio'
     else:
-        return '{ }'
+        return jsonify({})
 
     data = []
     for i in co.find({'topic': topic}).sort('timestamp', -1).limit(length):
-        data.append('{"value":%s,"timestamp":"%s","topic":"%s","ret":"%s"}' % (i['value'], i['timestamp'], i['topic'], i['ret']))
-    return '{"data":[%s]}' % ','.join(data)
+        data.append({'value': i['value'], 'timestamp': i['timestamp'], 'topic': i['topic'], 'ret': i['ret']})
+    return jsonify({'data': douglasPeucker.simplifyPath(data, tolerance)})
 
 @socketio.on('connect', namespace='/api/socket')
 def test_connect():
